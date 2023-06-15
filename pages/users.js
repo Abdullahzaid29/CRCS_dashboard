@@ -1,7 +1,7 @@
 import React,{useEffect,useState} from 'react'
 import axios from "axios";
 export default function Users() {
-    const getdata = axios.get("http://localhost:8000/api/users");
+    const getdata = axios.get("https://crcs-dashboard-2023.vercel.app/api/users");
       const [data,setData] = useState([])
       useEffect( () => {
       (  async function datas (){
