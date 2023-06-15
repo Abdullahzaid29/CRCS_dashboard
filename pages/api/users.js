@@ -1,5 +1,10 @@
 var XLSX = require('xlsx')
-export default async function handler  (req, res) {
+import Cors from 'micro-cors';
+const cors = Cors({
+    allowedMethods: ['GET', 'POST'], // Specify the allowed HTTP methods
+    allowHeaders: ['Content-Type'], // Specify the allowed request headers
+  })
+ async function handler  (req, res) {
     // const data = { message: 'Hello from the API!' };
     const filePath ="data/dummydataset.xlsx"; // Replace with the path to your Excel file
     const workbook =  XLSX.readFile(filePath);
@@ -29,3 +34,4 @@ export default async function handler  (req, res) {
 
     
   }
+  export default  cors(handler);
