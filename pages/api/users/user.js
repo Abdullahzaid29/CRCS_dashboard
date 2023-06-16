@@ -7,6 +7,7 @@ const cors = Cors({
  async function user  (req, res) {
     // const data = { message: 'Hello from the API!' };
     const filePath ="data/crcs_database.xlsx"; // Replace with the path to your Excel file
+    
     const workbook =  XLSX.readFile(filePath);
     const sheetName = workbook.SheetNames[0]; // Assuming you want to read the first sheet
     const worksheet = workbook.Sheets[sheetName];
