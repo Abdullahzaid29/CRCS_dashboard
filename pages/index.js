@@ -3,7 +3,7 @@ import axios from "axios";
 import ChartComponent from './chartcomponent';
 import Graph from './graph';
 // import Map from './map';
-import { UserData } from './data';
+import { UserData } from '../data/data';
 import dynamic from "next/dynamic"
 const Map = dynamic(() => import("./maps"), { ssr:false })
 
