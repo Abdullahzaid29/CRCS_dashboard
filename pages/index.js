@@ -5,7 +5,7 @@ import Graph from './graph';
 // import Map from './map';
 import { UserData } from './data';
 import dynamic from "next/dynamic"
-const Map = dynamic(() => import("./map"), { ssr:false })
+const Map = dynamic(() => import("./maps"), { ssr:false })
 
 
 export default function Home() {
