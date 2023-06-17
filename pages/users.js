@@ -1,6 +1,8 @@
 import React,{useEffect,useState} from 'react'
 import axios from "axios";
 import Pagination from './pagination';
+import { HomeIcon, CreditCardIcon, UserIcon } from "@heroicons/react/24/solid";
+
 export default function Users() {
     const getdata = axios.get("https://crcs-server.onrender.com/api/user");
       const [data,setData] = useState([])
@@ -39,7 +41,13 @@ export default function Users() {
         <p className="text-gray-700 text-3xl mb-16 font-bold">Users</p>
   
         <div className="grid lg:grid-cols-3 gap-5 mb-16">
-          <div className="rounded bg-white h-40 shadow-sm"></div>
+          <div className="rounded bg-white h-40 shadow-sm">
+          <div className=" rounded bg-white h-40 shadow-sm grid grid-rows-3 grid-flow-col gap-4">
+        <h2 className=" text-1xl font-bold mb-2 mt-5 px-4 py-2">Number Of Societies</h2>
+        <span className='font-bold mb-2 mt-2 px-10 py-2 '>{data.length}</span>
+        <UserIcon className="h-10 w-10 row-span-2 col-span-2 mt-10" />
+        </div>
+          </div>
           <div className="rounded bg-white h-40 shadow-sm"></div>
           <div className="rounded bg-white h-40 shadow-sm"></div>
         </div>
@@ -71,7 +79,15 @@ export default function Users() {
                 </th> */}
             </tr>
         </thead>
-        {currentPosts.length==0?<div>loading</div>:    <tbody>
+        {currentPosts.length==0?
+        <div
+        className=" inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-current border-r-transparent align-[-0.125em] motion-reduce:animate-[spin_1.5s_linear_infinite]"
+        role="status">
+        <span
+          class="!absolute !-m-px !h-px !w-px !overflow-hidden !whitespace-nowrap !border-0 !p-0 ![clip:rect(0,0,0,0)]"
+          >Loading...</span
+        >
+      </div>:    <tbody>
             {currentPosts.map(item =>{
                 return(
                     <>
