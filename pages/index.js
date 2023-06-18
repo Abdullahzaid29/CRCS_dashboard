@@ -61,7 +61,7 @@ export default function Home() {
           <Graph chartData={userData} />
         </div>
       </div>
-      <div className="grid col-1 bg-white h-96 shadow-sm">
+      <div className="grid col-1 bg-white h-96 shadow-sm mb-16">
         <Map />
       </div>
     </>
