@@ -1,9 +1,9 @@
 import React,{useEffect,useState} from 'react'
 import axios from "axios";
-import Pagination from './pagination';
+import Pagination from '../src/pagination';
 import { HomeIcon, CreditCardIcon, UserIcon } from "@heroicons/react/24/solid";
-import Table from './table';
-import Exportxlsheet from './exportxlsheet';
+import Table from '../src/table';
+import Exportxlsheet from '../src/exportxlsheet';
 export default function Users() {
     const getdata = axios.get("https://crcs-server.onrender.com/api/user");
       const [data,setData] = useState([])
@@ -161,7 +161,7 @@ export default function Users() {
       ))}
       
     </select>
-    {/* <Exportxlsheet data={data} /> */}
+    <Exportxlsheet data={data} />
 {/* 
 <input
         type="text"
