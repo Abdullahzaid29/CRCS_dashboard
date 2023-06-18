@@ -19,7 +19,7 @@ ChartJS.register(
   Legend
 );
 
-const ChartComponent = ({chartData}) => {
+const ChartComponent = ({ chartData }) => {
 
 
   const [chartOptions, setChartOptions] = useState({});
