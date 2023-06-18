@@ -43,7 +43,7 @@ const ChartComponent = ({chartData}) => {
 
   return (
     <>
-      <div className='w-full md:col-span-2 relative lg:h-[35vh] h-[40vh] m-auto p-4 border rounded-lg bg-white shadow-sm'>
+      <div className='w-full md:col-span-2 relative lg:h-[40vh] h-[40vh] m-auto p-4 border rounded-lg bg-white shadow-sm'>
         <Bar data={chartData} options={chartOptions} />
       </div>
     </>

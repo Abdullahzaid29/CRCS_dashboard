@@ -57,11 +57,11 @@ export default function Home() {
         <ChartComponent chartData={userData} />
 
         </div>
-        <div className="rounded bg-white h-60 shadow-sm">
+        <div className="rounded bg-white h-60 shadow-sm mb-16">
           <Graph chartData={userData} />
         </div>
       </div>
-      <div className="grid col-1 bg-white h-96 shadow-sm mb-16">
+      <div className="grid col-1 bg-white h-96 shadow-sm mb-16 px-10 py-10">
         <Map />
       </div>
     </>
