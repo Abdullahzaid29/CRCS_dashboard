@@ -20,7 +20,7 @@ ChartJS.register(
 );
 
 const ChartComponent = ({ chartData }) => {
-
+console.log("chartData",chartData);
 
   const [chartOptions, setChartOptions] = useState({});
 
@@ -43,7 +43,7 @@ const ChartComponent = ({ chartData }) => {
 
   return (
     <>
-      <div className='w-full md:col-span-2 relative lg:h-[40vh] h-[40vh] m-auto p-4 border rounded-lg bg-white shadow-sm'>
+      <div className='w-full md:col-span-2 relative lg:h-[60vh] h-[60vh] m-auto p-10 border rounded-lg bg-white shadow-sm'>
         <Bar data={chartData} options={chartOptions} />
       </div>
     </>
