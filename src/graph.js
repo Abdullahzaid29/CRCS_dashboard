@@ -2,7 +2,7 @@ import React,{useEffect,useState} from "react";
 import { Line } from "react-chartjs-2";
 import { Chart as ChartJS } from "chart.js/auto";
 
-function graph({ label,data }) {
+function Graph({ label,data }) {
   const [chartOptions, setChartOptions] = useState({});
 
   useEffect(() => {
@@ -43,4 +43,4 @@ function graph({ label,data }) {
   )
 }
 
-export default graph;
+export default Graph;
