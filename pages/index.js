@@ -5,6 +5,8 @@ import Graph from '../src/graph';
 // import Map from './map';
 import { UserData } from '../data/data';
 import dynamic from "next/dynamic"
+import Hometable1 from '../src/hometable1';
+import Hometable2 from '../src/hometable2';
 const Map = dynamic(() => import("../src/maps"), { ssr:false })
 
 
@@ -12,6 +14,8 @@ export default function Home() {
   const getdata = axios.get("https://crcs-server.onrender.com/api/user");
   const [data,setData] = useState([])
   const [label,setlabel] = useState([])
+  const [sector,setsector] = useState([])
+
 
   const [currentPage, setCurrentPage] = useState(1);
   const [postsPerPage] = useState(10);
@@ -59,12 +63,13 @@ export default function Home() {
 
     let  label_data = uniqueOptions.map((value)=>(value.state))
     let  dataset = uniqueOptions.map((value)=>(value.District))
+    let uniquesectortype =  removeDuplicates(response.data,"SectorType");
     setlabel( uniqueOptions.map((value)=>(value.state)))
+    setsector( uniquesectortype.map((value)=>(value.SectorType)))
   //  for (let i = 0; i < 5; i++) {
   //  samarr.push(label_data[i])  
   //  }
   // samarr.push(label_data)
-  // console.log(label_data);
 
 
   })
@@ -80,20 +85,56 @@ export default function Home() {
  
 // setlabel(samarr)
 console.log("uniqueOptions sssschart",label);
+console.log("sectortype",sector);
 
-  const [userData, setUserData] = useState({
-    labels: UserData.map((data) => data.year),
-    datasets: [
-      {
-        label: "Users Gained",
-        data: UserData.map((data) => data.userGain),
-        borderColor: 'rgb(255,165,0)',
-        backgroundColor: 'rgb(255,165,0)',
-        borderWidth: 1,
-      },
-    ],
-  });
+let label_data = []
+for (let i = 0; i < label.length; i++) {
+   // const element = array[i];
+   const filteredData = data.filter((item) => {
+      return (
+      //   item.name.toLowerCase().includes(filterValues.name.toLowerCase()) &&
+        item.state.toLowerCase().includes(label[i].toLowerCase())
+      //   item.SectorType && item.SectorType.toLowerCase().includes(filterValues.sector.toLowerCase())
+      );
+    });
+// console.log(filteredData.length);
+label_data.push(filteredData.length)
 
+}
+var hometable1_data = [];
+
+for (var i = 0; i < label.length; i++) {
+  var datas = {
+   id:i,
+    state: label[i],
+    count: label_data[i]
+  };
+  hometable1_data.push(datas);
+}
+
+console.log("people",hometable1_data);
+console.log("label_data",label_data);
+let sector_data = []
+for (let i = 0; i < sector.length; i++) {
+   const filteredData = data.filter((item) => {
+      return (
+      item.SectorType &&  item.SectorType.toLowerCase().includes( sector[i] && sector[i].toLowerCase())
+      );
+    });
+sector_data.push(filteredData.length)
+
+}
+console.log("sector_data",sector_data);
+var hometable2_data = [];
+
+for (var i = 0; i < sector.length; i++) {
+  var datas = {
+   id:i,
+    sector: sector[i],
+    count: sector_data[i]
+  };
+  hometable2_data.push(datas);
+}
 
   return (
     <>
@@ -112,232 +153,34 @@ console.log("uniqueOptions sssschart",label);
      <div class="grid grid-cols-1 2xl:grid-cols-2 xl:gap-4 my-4">
                   <div class="bg-white shadow rounded-lg mb-4 p-4 sm:p-6 h-full">
                      <div class="flex items-center justify-between mb-4">
-                        <h3 class="text-xl font-bold leading-none text-gray-900">Latest Customers</h3>
+                        <h3 class="text-xl font-bold leading-none text-gray-900">Latest Users</h3>
                         <a href="#" class="text-sm font-medium text-cyan-600 hover:bg-gray-100 rounded-lg inline-flex items-center p-2">
                         View all
                         </a>
                      </div>
                      <div class="flow-root">
-                     <ChartComponent chartData={userData} />
+                     <ChartComponent label={label} data={label_data} />
                      </div>
                   </div>
 
                   <div class="bg-white shadow rounded-lg mb-4 p-4 sm:p-6 h-full">
                      <div class="flex items-center justify-between mb-4">
-                        <h3 class="text-xl font-bold leading-none text-gray-900">Latest Customers</h3>
+                        <h3 class="text-xl font-bold leading-none text-gray-900">Latest Users</h3>
                         <a href="#" class="text-sm font-medium text-cyan-600 hover:bg-gray-100 rounded-lg inline-flex items-center p-2">
                         View all
                         </a>
                      </div>
                      <div class="flow-root">
-                     <Graph chartData={userData} />
+                     <Graph label={label} data={label_data} />
                      </div>
                   </div>
        
                </div>
                <div class="grid grid-cols-1 2xl:grid-cols-2 xl:gap-4 my-4">
                 
-               <div class="bg-white shadow rounded-lg p-4 sm:p-6 xl:p-8 ">
-                     <h3 class="text-xl leading-none font-bold text-gray-900 mb-10">Acquisition Overview</h3>
-                     <div class="block w-full overflow-x-auto">
-                        <table class="items-center w-full bg-transparent border-collapse">
-                           <thead>
-                              <tr>
-                                 <th class="px-4 bg-gray-50 text-gray-700 align-middle py-3 text-xs font-semibold text-left uppercase border-l-0 border-r-0 whitespace-nowrap">Top Channels</th>
-                                 <th class="px-4 bg-gray-50 text-gray-700 align-middle py-3 text-xs font-semibold text-left uppercase border-l-0 border-r-0 whitespace-nowrap">Users</th>
-                                 <th class="px-4 bg-gray-50 text-gray-700 align-middle py-3 text-xs font-semibold text-left uppercase border-l-0 border-r-0 whitespace-nowrap min-w-140-px"></th>
-                              </tr>
-                           </thead>
-                           <tbody class="divide-y divide-gray-100">
-                              <tr class="text-gray-500">
-                                 <th class="border-t-0 px-4 align-middle text-sm font-normal whitespace-nowrap p-4 text-left">Organic Search</th>
-                                 <td class="border-t-0 px-4 align-middle text-xs font-medium text-gray-900 whitespace-nowrap p-4">5,649</td>
-                                 <td class="border-t-0 px-4 align-middle text-xs whitespace-nowrap p-4">
-                                    <div class="flex items-center">
-                                       <span class="mr-2 text-xs font-medium">30%</span>
-                                       <div class="relative w-full">
-                                          <div class="w-full bg-gray-200 rounded-sm h-2">
-                                             <div class="bg-cyan-600 h-2 rounded-sm"  style={{"width":"7%"}}></div>
-                                          </div>
-                                       </div>
-                                    </div>
-                                 </td>
-                              </tr>
-                              <tr class="text-gray-500">
-                                 <th class="border-t-0 px-4 align-middle text-sm font-normal whitespace-nowrap p-4 text-left">Referral</th>
-                                 <td class="border-t-0 px-4 align-middle text-xs font-medium text-gray-900 whitespace-nowrap p-4">4,025</td>
-                                 <td class="border-t-0 px-4 align-middle text-xs whitespace-nowrap p-4">
-                                    <div class="flex items-center">
-                                       <span class="mr-2 text-xs font-medium">24%</span>
-                                       <div class="relative w-full">
-                                          <div class="w-full bg-gray-200 rounded-sm h-2">
-                                             <div class="bg-orange-300 h-2 rounded-sm"  style={{"width":"7%"}}></div>
-                                          </div>
-                                       </div>
-                                    </div>
-                                 </td>
-                              </tr>
-                              <tr class="text-gray-500">
-                                 <th class="border-t-0 px-4 align-middle text-sm font-normal whitespace-nowrap p-4 text-left">Direct</th>
-                                 <td class="border-t-0 px-4 align-middle text-xs font-medium text-gray-900 whitespace-nowrap p-4">3,105</td>
-                                 <td class="border-t-0 px-4 align-middle text-xs whitespace-nowrap p-4">
-                                    <div class="flex items-center">
-                                       <span class="mr-2 text-xs font-medium">18%</span>
-                                       <div class="relative w-full">
-                                          <div class="w-full bg-gray-200 rounded-sm h-2">
-                                             <div class="bg-teal-400 h-2 rounded-sm"  style={{"width":"7%"}}></div>
-                                          </div>
-                                       </div>
-                                    </div>
-                                 </td>
-                              </tr>
-                              <tr class="text-gray-500">
-                                 <th class="border-t-0 px-4 align-middle text-sm font-normal whitespace-nowrap p-4 text-left">Social</th>
-                                 <td class="border-t-0 px-4 align-middle text-xs font-medium text-gray-900 whitespace-nowrap p-4">1251</td>
-                                 <td class="border-t-0 px-4 align-middle text-xs whitespace-nowrap p-4">
-                                    <div class="flex items-center">
-                                       <span class="mr-2 text-xs font-medium">12%</span>
-                                       <div class="relative w-full">
-                                          <div class="w-full bg-gray-200 rounded-sm h-2">
-                                             <div class="bg-pink-600 h-2 rounded-sm" style={{"width":"7%"}}></div>
-                                          </div>
-                                       </div>
-                                    </div>
-                                 </td>
-                              </tr>
-                              <tr class="text-gray-500">
-                                 <th class="border-t-0 px-4 align-middle text-sm font-normal whitespace-nowrap p-4 text-left">Other</th>
-                                 <td class="border-t-0 px-4 align-middle text-xs font-medium text-gray-900 whitespace-nowrap p-4">734</td>
-                                 <td class="border-t-0 px-4 align-middle text-xs whitespace-nowrap p-4">
-                                    <div class="flex items-center">
-                                       <span class="mr-2 text-xs font-medium">9%</span>
-                                       <div class="relative w-full">
-                                          <div class="w-full bg-gray-200 rounded-sm h-2">
-                                             <div class="bg-indigo-600 h-2 rounded-sm"  style={{"width":"7%"}}></div>
-                                          </div>
-                                       </div>
-                                    </div>
-                                 </td>
-                              </tr>
-                              <tr class="text-gray-500">
-                                 <th class="border-t-0 align-middle text-sm font-normal whitespace-nowrap p-4 pb-0 text-left">Email</th>
-                                 <td class="border-t-0 align-middle text-xs font-medium text-gray-900 whitespace-nowrap p-4 pb-0">456</td>
-                                 <td class="border-t-0 align-middle text-xs whitespace-nowrap p-4 pb-0">
-                                    <div class="flex items-center">
-                                       <span class="mr-2 text-xs font-medium">7%</span>
-                                       <div class="relative w-full">
-                                          <div class="w-full bg-gray-200 rounded-sm h-2">
-                                             <div class="bg-purple-500 h-2 rounded-sm" style={{"width":"7%"}}></div>
-                                          </div>
-                                       </div>
-                                    </div>
-                                 </td>
-                              </tr>
-                           </tbody>
-                        </table>
-                     </div>
-                  </div>
-
-                  <div class="bg-white shadow rounded-lg p-4 sm:p-6 xl:p-8 ">
-                     <h3 class="text-xl leading-none font-bold text-gray-900 mb-10">Acquisition Overview</h3>
-                     <div class="block w-full overflow-x-auto">
-                        <table class="items-center w-full bg-transparent border-collapse">
-                           <thead>
-                              <tr>
-                                 <th class="px-4 bg-gray-50 text-gray-700 align-middle py-3 text-xs font-semibold text-left uppercase border-l-0 border-r-0 whitespace-nowrap">Top Channels</th>
-                                 <th class="px-4 bg-gray-50 text-gray-700 align-middle py-3 text-xs font-semibold text-left uppercase border-l-0 border-r-0 whitespace-nowrap">Users</th>
-                                 <th class="px-4 bg-gray-50 text-gray-700 align-middle py-3 text-xs font-semibold text-left uppercase border-l-0 border-r-0 whitespace-nowrap min-w-140-px"></th>
-                              </tr>
-                           </thead>
-                           <tbody class="divide-y divide-gray-100">
-                              <tr class="text-gray-500">
-                                 <th class="border-t-0 px-4 align-middle text-sm font-normal whitespace-nowrap p-4 text-left">Organic Search</th>
-                                 <td class="border-t-0 px-4 align-middle text-xs font-medium text-gray-900 whitespace-nowrap p-4">5,649</td>
-                                 <td class="border-t-0 px-4 align-middle text-xs whitespace-nowrap p-4">
-                                    <div class="flex items-center">
-                                       <span class="mr-2 text-xs font-medium">30%</span>
-                                       <div class="relative w-full">
-                                          <div class="w-full bg-gray-200 rounded-sm h-2">
-                                             <div class="bg-cyan-600 h-2 rounded-sm"  style={{"width":"7%"}}></div>
-                                          </div>
-                                       </div>
-                                    </div>
-                                 </td>
-                              </tr>
-                              <tr class="text-gray-500">
-                                 <th class="border-t-0 px-4 align-middle text-sm font-normal whitespace-nowrap p-4 text-left">Referral</th>
-                                 <td class="border-t-0 px-4 align-middle text-xs font-medium text-gray-900 whitespace-nowrap p-4">4,025</td>
-                                 <td class="border-t-0 px-4 align-middle text-xs whitespace-nowrap p-4">
-                                    <div class="flex items-center">
-                                       <span class="mr-2 text-xs font-medium">24%</span>
-                                       <div class="relative w-full">
-                                          <div class="w-full bg-gray-200 rounded-sm h-2">
-                                             <div class="bg-orange-300 h-2 rounded-sm"  style={{"width":"7%"}}></div>
-                                          </div>
-                                       </div>
-                                    </div>
-                                 </td>
-                              </tr>
-                              <tr class="text-gray-500">
-                                 <th class="border-t-0 px-4 align-middle text-sm font-normal whitespace-nowrap p-4 text-left">Direct</th>
-                                 <td class="border-t-0 px-4 align-middle text-xs font-medium text-gray-900 whitespace-nowrap p-4">3,105</td>
-                                 <td class="border-t-0 px-4 align-middle text-xs whitespace-nowrap p-4">
-                                    <div class="flex items-center">
-                                       <span class="mr-2 text-xs font-medium">18%</span>
-                                       <div class="relative w-full">
-                                          <div class="w-full bg-gray-200 rounded-sm h-2">
-                                             <div class="bg-teal-400 h-2 rounded-sm"  style={{"width":"7%"}}></div>
-                                          </div>
-                                       </div>
-                                    </div>
-                                 </td>
-                              </tr>
-                              <tr class="text-gray-500">
-                                 <th class="border-t-0 px-4 align-middle text-sm font-normal whitespace-nowrap p-4 text-left">Social</th>
-                                 <td class="border-t-0 px-4 align-middle text-xs font-medium text-gray-900 whitespace-nowrap p-4">1251</td>
-                                 <td class="border-t-0 px-4 align-middle text-xs whitespace-nowrap p-4">
-                                    <div class="flex items-center">
-                                       <span class="mr-2 text-xs font-medium">12%</span>
-                                       <div class="relative w-full">
-                                          <div class="w-full bg-gray-200 rounded-sm h-2">
-                                             <div class="bg-pink-600 h-2 rounded-sm" style={{"width":"7%"}}></div>
-                                          </div>
-                                       </div>
-                                    </div>
-                                 </td>
-                              </tr>
-                              <tr class="text-gray-500">
-                                 <th class="border-t-0 px-4 align-middle text-sm font-normal whitespace-nowrap p-4 text-left">Other</th>
-                                 <td class="border-t-0 px-4 align-middle text-xs font-medium text-gray-900 whitespace-nowrap p-4">734</td>
-                                 <td class="border-t-0 px-4 align-middle text-xs whitespace-nowrap p-4">
-                                    <div class="flex items-center">
-                                       <span class="mr-2 text-xs font-medium">9%</span>
-                                       <div class="relative w-full">
-                                          <div class="w-full bg-gray-200 rounded-sm h-2">
-                                             <div class="bg-indigo-600 h-2 rounded-sm"  style={{"width":"7%"}}></div>
-                                          </div>
-                                       </div>
-                                    </div>
-                                 </td>
-                              </tr>
-                              <tr class="text-gray-500">
-                                 <th class="border-t-0 align-middle text-sm font-normal whitespace-nowrap p-4 pb-0 text-left">Email</th>
-                                 <td class="border-t-0 align-middle text-xs font-medium text-gray-900 whitespace-nowrap p-4 pb-0">456</td>
-                                 <td class="border-t-0 align-middle text-xs whitespace-nowrap p-4 pb-0">
-                                    <div class="flex items-center">
-                                       <span class="mr-2 text-xs font-medium">7%</span>
-                                       <div class="relative w-full">
-                                          <div class="w-full bg-gray-200 rounded-sm h-2">
-                                             <div class="bg-purple-500 h-2 rounded-sm" style={{"width":"7%"}}></div>
-                                          </div>
-                                       </div>
-                                    </div>
-                                 </td>
-                              </tr>
-                           </tbody>
-                        </table>
-                     </div>
-                  </div>
+            
+<Hometable1 data={hometable1_data} />
+               <Hometable2 data={hometable2_data} />
                </div>
 
 

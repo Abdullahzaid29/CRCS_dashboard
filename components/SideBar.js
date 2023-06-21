@@ -51,22 +51,7 @@ const SideBar = forwardRef(({ showNav }, ref) => {
             </div>
           </div>
         </Link>
-        <Link href="/billing">
-          <div
-            className={`pl-6 py-3 mx-5 rounded text-center cursor-pointer mb-3 flex items-center transition-colors ${
-              router.pathname == "/billing"
-                ? "bg-green-100 text-green-500"
-                : "text-gray-400 hover:bg-green-100 hover:text-green-500"
-            }`}
-          >
-            <div className="mr-2">
-              <CreditCardIcon className="h-5 w-5" />
-            </div>
-            <div>
-              <p>Billing</p>
-            </div>
-          </div>
-        </Link>
+      
       </div>
     </div>
   );
