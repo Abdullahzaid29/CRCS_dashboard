@@ -12,14 +12,47 @@ const Map = dynamic(() => import("../src/maps"), { ssr:false })
 
 
 export default function Home() {
-  const getdata = axios.get("https://crcs-server.onrender.com/api/user");
+  // const getdata = axios.get("https://crcs-server.onrender.com/api/user");
   const [data,setData] = useState([])
   const [label,setlabel] = useState([])
   const [sector,setsector] = useState([])
-
+console.log("data",data);
 
   const [currentPage, setCurrentPage] = useState(1);
   const [postsPerPage] = useState(10);
+  useEffect( () => {
+    (  async function datas (){
+      if (!data) {
+          return null;
+      } else {
+            try {
+   
+         axios.get("https://crcs-server.onrender.com/api/user").then((response) => {
+      // console.log(response);
+      setData(response.data)
+      const uniqueOptions = removeDuplicates(response.data,"state");
+  
+      let  label_data = uniqueOptions.map((value)=>(value.state))
+      let  dataset = uniqueOptions.map((value)=>(value.District))
+      let uniquesectortype =  removeDuplicates(response.data,"SectorType");
+      setlabel( uniqueOptions.map((value)=>(value.state)))
+      setsector( uniquesectortype.map((value)=>(value.SectorType)))
+    //  for (let i = 0; i < 5; i++) {
+    //  samarr.push(label_data[i])  
+    //  }
+    // samarr.push(label_data)
+  
+  
+    })
+        } catch (err) {
+          console.log('pages auth in error');
+          console.log(err);
+        }
+      }
+      
+      })();
+  
+    },[]);
   const removeDuplicates = (data,options) => {
     const uniqueOptions = [];
     switch (options) {
@@ -50,43 +83,11 @@ export default function Home() {
     return uniqueOptions;
   };
   let samarr  = []
-  useEffect( () => {
-  (  async function datas (){
-    if (!data) {
-        return null;
-    } else {
-          try {
+
  
-  getdata.then((response) => {
-    // console.log(response);
-    setData(response.data)
-    const uniqueOptions = removeDuplicates(response.data,"state");
-
-    let  label_data = uniqueOptions.map((value)=>(value.state))
-    let  dataset = uniqueOptions.map((value)=>(value.District))
-    let uniquesectortype =  removeDuplicates(response.data,"SectorType");
-    setlabel( uniqueOptions.map((value)=>(value.state)))
-    setsector( uniquesectortype.map((value)=>(value.SectorType)))
-  //  for (let i = 0; i < 5; i++) {
-  //  samarr.push(label_data[i])  
-  //  }
-  // samarr.push(label_data)
-
-
-  })
-      } catch (err) {
-        console.log('pages auth in error');
-        console.log(err);
-      }
-    }
-    
-    })();
-
-  },[]);
- 
-// setlabel(samarr)
-console.log("uniqueOptions sssschart",label);
-console.log("sectortype",sector);
+// // setlabel(samarr)
+// console.log("uniqueOptions sssschart",label);
+// console.log("sectortype",sector);
 
 let label_data = []
 for (let i = 0; i < label.length; i++) {
@@ -113,8 +114,8 @@ for (var i = 0; i < label.length; i++) {
   hometable1_data.push(datas);
 }
 
-console.log("people",hometable1_data);
-console.log("label_data",label_data);
+// console.log("people",hometable1_data);
+// console.log("label_data",label_data);
 let sector_data = []
 for (let i = 0; i < sector.length; i++) {
    const filteredData = data.filter((item) => {
@@ -125,7 +126,7 @@ for (let i = 0; i < sector.length; i++) {
 sector_data.push(filteredData.length)
 
 }
-console.log("sector_data",sector_data);
+// console.log("sector_data",sector_data);
 var hometable2_data = [];
 
 for (var i = 0; i < sector.length; i++) {
