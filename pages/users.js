@@ -50,7 +50,7 @@ export default function Users() {
         } else {
               try {
      
-      getdata.then((response) => {
+            axios.get("https://crcs-server.onrender.com/api/user").then((response) => {
         // console.log(response);
         setData(response.data)
       })
@@ -164,15 +164,17 @@ export default function Users() {
                   </div>
                </div>
         <div className='px-10 py-10  bg-white'>
+          
    <div className="relative overflow-x-auto shadow-2xl sm:rounded-lg py-5 px-5 w-full">
-    <div className='grid lg:grid-cols-4 gap-1 '>
+    <div className='grid lg:grid-cols-4 gap-1'>
     <input
         type="text"
         value={filterValues.name}
         name="name"
         onChange={handleFilterChange}
         placeholder="Search by name"
-        className="p-1 mb-4 px-5 py-2 ml-20 border border-black text-sm flex rounded-lg"
+        // className="p-1 mb-4 px-5 py-2 ml-20 border border-black text-sm flex rounded-lg"
+        className="mb-4 px-5 py-2 ml-20 border border-black text-sm flex rounded-lg	"
       />
         {/* <input
         type="text"        value={filterValues.state}
@@ -185,7 +187,7 @@ export default function Users() {
       {/* <label for="state">Search by state</label> */}
 
        <select value={filterValues.state} onChange={handleFilterChange}    name="state"     placeholder="Search by state"
-           className="mb-4 px-5 py-2 mx-20 border border-black text-sm flex rounded-lg	"
+           className="mb-4 px-5 py-2 ml-20 border border-black text-sm flex rounded-lg	"
        >
       <option value="">select by state</option>
       {uniqueOptions.map((option) => (
@@ -196,7 +198,7 @@ export default function Users() {
       
     </select>
     <select value={filterValues.sector} onChange={handleFilterChange}    name="sector"     placeholder="Search by sector"
-           className="mb-4 px-5 py-2 mx-20 border border-black text-sm flex rounded-lg	"
+           className="mb-4 px-5 py-2 ml-20 border border-black text-sm flex rounded-lg	"
        >
       <option value="">select by sector</option>
       {sectoroptions.map((option) => (
